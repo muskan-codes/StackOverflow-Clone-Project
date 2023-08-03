@@ -22,17 +22,17 @@ def register(request):
 def profile(request):
     return render(request, 'stackusers/profile.html')
 
-#To update Profile
+
 @login_required
 def profile_update(request):
-    if request.method == "POST": # If the request method type is POST get the info already posted by the user if the user is already registered and just want to update profile
-        u_form = UserUpdateForm(request.POST, instance= request.user) #Post all the fields of the profile for a user who is already registered
+    if request.method == "POST": 
+        u_form = UserUpdateForm(request.POST, instance= request.user) 
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        if u_form.is_valid() and p_form.is_valid(): #if the form filled is valid 
-            u_form.save()                           #save the form
+        if u_form.is_valid() and p_form.is_valid(): 
+            u_form.save()                           
             p_form.save()                     
-            messages.success(request, f'Account Updated Successfully!')   #and show a message
-            return redirect('profile')                                     #and redirect to profile page 
+            messages.success(request, f'Account Updated Successfully!')   
+            return redirect('profile')                                     
     else:
                 u_form = UserUpdateForm(request.POST, instance= request.user) 
                 p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
