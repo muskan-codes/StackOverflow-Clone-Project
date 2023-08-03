@@ -178,11 +178,10 @@
                                         
                                         <form action="" method="POST">
                                             {% csrf_token %}
-                                            <!--{{form}}-->
 
                                             {{form.name}}
                                             {{form.content|safe}}
-                                            {{ form.media }}
+                                            {{form.media}}
                                             <button class="btn btn-success" id="logout-btn" type="submit">Post Answer</button>
                                             <a style="text-decoration: none; " class="btn btn-outline-secondary" href="">Cancel</a>
                                         </form>

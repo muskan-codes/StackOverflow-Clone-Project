@@ -2,7 +2,7 @@ from django.db import models
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Question, Comment
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin #it will forbid any other user to update Q. of some other user
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin 
 from .forms import CommentForm
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
@@ -15,12 +15,12 @@ def home(request):
 def base(request):
     return render(request, 'base.html')
 
-def like_view(request,pk): #views which gonna request particular Q. where like will go that Q. will have pk
-    post = get_object_or_404(Question, id=request.POST.get('question_id')) #get Q. id or show 404 error if Q doesnt exist . In django id is automatically generated
-    liked = False #first time there will be no likes on the Q
-    if post.likes.filter(id = request.user.id).exists(): #if the id exist means user already liked the post
-        post.likes.remove(request.user) #remove the liked btn
-        liked = False #there is no like
+def like_view(request,pk): 
+    post = get_object_or_404(Question, id=request.POST.get('question_id')) 
+    liked = False 
+    if post.likes.filter(id = request.user.id).exists(): 
+        post.likes.remove(request.user) 
+        liked = False 
     else:
         post.likes.add(request.user)
         liked = True
@@ -28,10 +28,10 @@ def like_view(request,pk): #views which gonna request particular Q. where like w
 
 class QuestionListView(ListView): 
     model = Question
-    context_object_name = 'questions' # context obj name is what u wanna use to refer views in  templates needed in question_list.html in loop {% for question in questions%}
-    ordering = ['-date_created']  #it will order questions according to its date created so that latest Q. will come on top
+    context_object_name = 'questions'
+    ordering = ['-date_created']  
     
-    def get_context_data(self, **kwargs): #configure search button
+    def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs)
         search_input = self.request.GET.get('search-area') or ""
         if search_input:
@@ -39,7 +39,7 @@ class QuestionListView(ListView):
             context['search_input']= search_input 
         return context  
 
-#show Detail of Questions when clicked
+
 class QuestionDetailView(DetailView):
     model = Question
 
@@ -57,17 +57,16 @@ class QuestionDetailView(DetailView):
 
 
   
-#CRUD Functions
-# View for Creating a question   
+   
 class QuestionCreateView(LoginRequiredMixin, CreateView):
     model = Question 
     fields = ['title', 'content']  
 
-    def form_valid(self, form): #if form filled to create a Q is valid get user info of user and automatically save it to the user id info in db
+    def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-# Updating Q.(Green tick to work)
+
 class QuestionUpdateView( UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Question
     fields = ['title', 'content']
@@ -76,27 +75,27 @@ class QuestionUpdateView( UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
     
-    def test_func(self): #This will check if the user who wants to update Q. is the same user that posted the Q.
+    def test_func(self): 
         question = self.get_object()
         if self.request.user == question.user:
             return True
         else:
             return False
         
-#Delete Question
+
 class QuestionDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     model = Question
     context_object_name = 'question'
-    success_url = "/" #when Q. is deleted page will be reverted to list page
+    success_url = "/" 
 
-    def test_func(self): #This will check if the user who wants to delete Q. is the same user that posted the Q.
+    def test_func(self): 
         question = self.get_object()
         if self.request.user == question.user:
             return True
         else:
             return False
       
-#Create a comment
+
 class CommentDetailView(CreateView):
     model = Comment
     form_class = CommentForm
@@ -107,13 +106,13 @@ class CommentDetailView(CreateView):
         return super().form_valid(form)
     success_url = reverse_lazy('stackbase:question_detail')
 
-#Add comment from frontend
+
 class AddCommentView(CreateView):
     models = Comment
     form_class = CommentForm
     template_name = 'stackbase/question_answer.html'
 
-    def form_valid(self, form): #saving comment that is posted and redirecting page to question_list
+    def form_valid(self, form): 
         form.instance.question_id = self.kwargs['pk']
         return super().form_valid(form)
     success_url = reverse_lazy('stackbase:question_list')

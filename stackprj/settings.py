@@ -136,8 +136,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL= 'stackbase:home' # Redirecting page after user log in to the home.html
+LOGIN_REDIRECT_URL= 'stackbase:home' 
 
-LOGIN_URL = 'login' # Redirect to the Login page  when user is logged out but wants to create,update,delete a Q. 
+LOGIN_URL = 'login'  
 
 #CRISPY_TEMPLATE_PACK = 'bootstrap4'
