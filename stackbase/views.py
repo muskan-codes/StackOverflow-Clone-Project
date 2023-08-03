@@ -25,8 +25,8 @@ def like_view(request,pk): #views which gonna request particular Q. where like w
         post.likes.add(request.user)
         liked = True
     return HttpResponseRedirect(reverse('stackbase:question_detail', args=[str(pk)]))
-#Show Question list
-class QuestionListView(ListView): #list of Qs listed by users
+
+class QuestionListView(ListView): 
     model = Question
     context_object_name = 'questions' # context obj name is what u wanna use to refer views in  templates needed in question_list.html in loop {% for question in questions%}
     ordering = ['-date_created']  #it will order questions according to its date created so that latest Q. will come on top

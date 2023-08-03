@@ -5,17 +5,17 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 # Create your models here.
 
-class Question(models.Model): #Inside Question Model list all the elements required for Questions
-    user = models.ForeignKey(User, on_delete=models.CASCADE) #when user is deleted its Q also get deleted
-    title = models.CharField(max_length=10000) #Title of the Q
+class Question(models.Model): 
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    title = models.CharField(max_length=10000) 
     #content = models.TextField(null=True, blank=True) #Content of the Q
     content = RichTextField()
-    likes = models.ManyToManyField(User, related_name='question_post') #Upvotes
-    date_created = models.DateTimeField(default= timezone.now) #Date and time when the Q is posted
+    likes = models.ManyToManyField(User, related_name='question_post') 
+    date_created = models.DateTimeField(default= timezone.now) 
 
 
     def __str__(self):
-         return f'{self.user.username} - Question' #output : Tobi - Question
+         return f'{self.user.username} - Question' 
     
     def get_absolute_url(self):  #when Q is posted from frontend after it is posted reerse page to its details.
         return reverse('stackbase:question_detail', kwargs={'pk': self.pk})
